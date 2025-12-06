@@ -1,79 +1,66 @@
 use anyhow::anyhow;
-
 use crate::solutions::Solution;
 
 pub struct Day02;
 
-fn is_repeated(i: u64) -> bool {
-    let str = i.to_string();
-
-    if str.len() % 2 != 0 {
+fn is_repeated(n: u64) -> bool {
+    let s = n.to_string();
+    if s.len() % 2 != 0 {
         return false;
     }
-
-    return str[..str.len() / 2] == str[str.len() / 2..];
+    let mid = s.len() / 2;
+    s[..mid] == s[mid..]
 }
 
-fn is_repeated_n(i: u64) -> bool {
-    let str = i.to_string();
-    for i in 1..=(str.len() / 2) {
-        let s = &str[..i];
-        if s.repeat(str.len() / s.len()) == str {
+fn is_repeated_n(n: u64) -> bool {
+    let s = n.to_string();
+    for i in 1..=(s.len() / 2) {
+        let pattern = &s[..i];
+        if pattern.repeat(s.len() / pattern.len()) == s {
             return true;
         }
     }
-    return false;
+    false
+}
+
+fn parse_range(range: &str) -> anyhow::Result<(u64, u64)> {
+    let mut parts = range.split('-');
+    let begin = parts
+        .next()
+        .ok_or(anyhow!("Invalid range"))?
+        .trim()
+        .parse::<u64>()?;
+    let end = parts
+        .next()
+        .ok_or(anyhow!("Invalid range"))?
+        .trim()
+        .parse::<u64>()?;
+    Ok((begin, end))
+}
+
+fn sum_matching<F>(input: &str, predicate: F) -> anyhow::Result<u64>
+where
+    F: Fn(u64) -> bool,
+{
+    let mut result = 0u64;
+    for range in input.split(',') {
+        let (begin, end) = parse_range(range)?;
+        for n in begin..=end {
+            if predicate(n) {
+                result += n;
+            }
+        }
+    }
+    Ok(result)
 }
 
 impl Solution for Day02 {
     fn part1(&self, input: &str) -> anyhow::Result<String> {
-        let mut result = 0u64;
-        let ranges = input.split(',');
-        for range in ranges {
-            let mut parts = range.split('-');
-            let begin = parts
-                .next()
-                .ok_or(anyhow!("Invalid range"))?
-                .trim()
-                .parse::<u64>()?;
-            let end = parts
-                .next()
-                .ok_or(anyhow!("Invalid range"))?
-                .trim()
-                .parse::<u64>()?;
-
-            for i in begin..=end {
-                if is_repeated(i) {
-                    result += i;
-                }
-            }
-        }
-        Ok(result.to_string())
+        sum_matching(input, is_repeated).map(|n| n.to_string())
     }
 
     fn part2(&self, input: &str) -> anyhow::Result<String> {
-        let mut result = 0u64;
-        let ranges = input.split(',');
-        for range in ranges {
-            let mut parts = range.split('-');
-            let begin = parts
-                .next()
-                .ok_or(anyhow!("Invalid range"))?
-                .trim()
-                .parse::<u64>()?;
-            let end = parts
-                .next()
-                .ok_or(anyhow!("Invalid range"))?
-                .trim()
-                .parse::<u64>()?;
-
-            for i in begin..=end {
-                if is_repeated_n(i) {
-                    result += i;
-                }
-            }
-        }
-        Ok(result.to_string())
+        sum_matching(input, is_repeated_n).map(|n| n.to_string())
     }
 }
 
