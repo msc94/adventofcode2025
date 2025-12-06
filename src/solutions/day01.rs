@@ -111,4 +111,12 @@ mod tests {
         assert_eq!(result, "10");
         Ok(())
     }
+
+    #[test]
+    #[ignore]
+    fn test_part2_land_on_0() -> anyhow::Result<()> {
+        let result = Day01.part2("L50")?;
+        assert_eq!(result, "1");
+        Ok(())
+    }
 }
