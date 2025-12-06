@@ -4,7 +4,7 @@ use crate::solutions::Solution;
 
 pub struct Day02;
 
-fn is_repeated(i: i32) -> bool {
+fn is_repeated(i: u64) -> bool {
     let str = i.to_string();
 
     if str.len() % 2 != 0 {
@@ -16,18 +16,18 @@ fn is_repeated(i: i32) -> bool {
 
 impl Solution for Day02 {
     fn part1(&self, input: &str) -> anyhow::Result<String> {
-        let mut result = 0;
+        let mut result = 0u64;
         let ranges = input.split(',');
         for range in ranges {
             let mut parts = range.split('-');
             let begin = parts
                 .next()
                 .ok_or(anyhow!("Invalid range"))?
-                .parse::<i32>()?;
+                .parse::<u64>()?;
             let end = parts
                 .next()
                 .ok_or(anyhow!("Invalid range"))?
-                .parse::<i32>()?;
+                .parse::<u64>()?;
 
             for i in begin..=end {
                 if is_repeated(i) {
