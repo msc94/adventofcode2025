@@ -11,3 +11,29 @@ impl Solution for Day01 {
         todo!("Implement part 2")
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use indoc::indoc;
+
+    use super::*;
+
+    #[test]
+    fn test_part1_example() -> anyhow::Result<()> {
+        let input = indoc! { "
+            L68
+            L30
+            R48
+            L5
+            R60
+            L55
+            L1
+            L99
+            R14
+            L82
+        "};
+        let result = Day01.part1(input)?;
+        assert_eq!(result, "expected answer");
+        Ok(())
+    }
+}
