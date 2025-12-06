@@ -12,13 +12,14 @@ A Rust scaffolding project for solving Advent of Code 2025 problems.
 │       ├── mod.rs       # Modules and Solution trait
 │       ├── day01.rs     # Day 1 solution
 │       └── ...
-├── inputs/              # Input files (day01.txt, day02.txt, etc.)
+├── inputs/              # Actual puzzle input files (day01.txt, day02.txt, etc.)
+├── examples/            # Example/test input files (day01.txt, day02.txt, etc.)
 └── Cargo.toml          # Project manifest
 ```
 
 ## Usage
 
-### Running a solution:
+### Running with actual input:
 
 ```bash
 # Run both parts for day 1
@@ -29,6 +30,19 @@ cargo run -- 5 1
 
 # Run only part 2 of day 5
 cargo run -- 5 2
+```
+
+### Running with example input:
+
+```bash
+# Run both parts for day 1 with example input
+cargo run -- 1 --example
+
+# Run part 1 of day 5 with example input
+cargo run -- 5 1 --example
+
+# Run part 2 of day 3 with example input
+cargo run -- 3 2 --example
 ```
 
 ### Adding a solution:
@@ -51,9 +65,11 @@ impl Solution for Day01 {
 }
 ```
 
-2. Place your input file at `inputs/dayXX.txt`
+2. Place your input files:
+   - Actual input: `inputs/dayXX.txt`
+   - Example input: `examples/dayXX.txt` (optional)
 
-3. Run with `cargo run -- XX`
+3. Run with `cargo run -- XX` or `cargo run -- XX --example`
 
 ## Building
 
