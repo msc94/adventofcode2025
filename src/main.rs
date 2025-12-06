@@ -1,12 +1,12 @@
 mod solutions;
 
-use std::fs;
-use std::env;
 use solutions::Solution;
+use std::env;
+use std::fs;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    
+
     if args.len() < 2 {
         eprintln!("Usage: {} <day> [part]", args[0]);
         eprintln!("Example: {} 1 1", args[0]);
@@ -22,11 +22,10 @@ fn main() {
     }
 
     let input_file = format!("inputs/day{:02}.txt", day);
-    let input = fs::read_to_string(&input_file)
-        .unwrap_or_else(|_| {
-            eprintln!("Could not read input file: {}", input_file);
-            String::new()
-        });
+    let input = fs::read_to_string(&input_file).unwrap_or_else(|_| {
+        eprintln!("Could not read input file: {}", input_file);
+        String::new()
+    });
 
     match day {
         1 => run_solution(&solutions::day01::Day01, input, part),
