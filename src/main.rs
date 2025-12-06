@@ -1,9 +1,9 @@
 mod solutions;
 
-use std::fs;
-use std::env;
-use solutions::Solution;
 use anyhow::Context;
+use solutions::Solution;
+use std::env;
+use std::fs;
 
 fn main() -> anyhow::Result<()> {
     let args: Vec<String> = env::args().collect();
@@ -12,9 +12,18 @@ fn main() -> anyhow::Result<()> {
         eprintln!("Usage: {} <day> [part] [--example]", args[0]);
         eprintln!("Examples:");
         eprintln!("  {} 1              # Run day 1 with actual input", args[0]);
-        eprintln!("  {} 1 1            # Run day 1 part 1 with actual input", args[0]);
-        eprintln!("  {} 1 --example    # Run day 1 with example input", args[0]);
-        eprintln!("  {} 1 2 --example  # Run day 1 part 2 with example input", args[0]);
+        eprintln!(
+            "  {} 1 1            # Run day 1 part 1 with actual input",
+            args[0]
+        );
+        eprintln!(
+            "  {} 1 --example    # Run day 1 with example input",
+            args[0]
+        );
+        eprintln!(
+            "  {} 1 2 --example  # Run day 1 part 2 with example input",
+            args[0]
+        );
         std::process::exit(1);
     }
 
