@@ -17,11 +17,12 @@ enum Part {
 #[command(name = "AoC 2025")]
 #[command(about = "Advent of Code 2025 solver", long_about = None)]
 struct Args {
-    /// Day number (1-25)
+    /// Day number
+    #[arg(long)]
     day: u32,
 
     /// Part to run (1 or 2)
-    #[arg(value_enum)]
+    #[arg(long, value_enum)]
     part: Option<Part>,
 
     /// Use example input instead of actual input
