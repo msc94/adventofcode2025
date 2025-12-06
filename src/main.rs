@@ -44,11 +44,7 @@ fn main() -> anyhow::Result<()> {
         None => "both",
     };
 
-    let solution: Box<dyn Solution> = match args.day {
-        1 => Box::new(solutions::day01::Day01),
-        _ => anyhow::bail!("Day {} not yet implemented", args.day),
-    };
-
+    let solution = solutions::get_solution(args.day)?;
     run_solution(&*solution, input, part_str)?;
 
     Ok(())
