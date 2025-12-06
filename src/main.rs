@@ -17,7 +17,8 @@ enum Part {
 #[command(name = "AoC 2025")]
 #[command(about = "Advent of Code 2025 solver", long_about = None)]
 struct Args {
-    /// Day number (1)
+    /// Day number (1-25)
+    #[arg(value_parser = 1..=25)]
     day: u32,
 
     /// Part to run (1 or 2)
@@ -43,7 +44,12 @@ fn main() -> anyhow::Result<()> {
         None => "both",
     };
 
-    run_solution(&solutions::day01::Day01, input, part_str)?;
+    let solution: Box<dyn Solution> = match args.day {
+        1 => Box::new(solutions::day01::Day01),
+        _ => anyhow::bail!("Day {} not yet implemented", args.day),
+    };
+
+    run_solution(&*solution, input, part_str)?;
 
     Ok(())
 }
