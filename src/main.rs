@@ -1,9 +1,9 @@
 mod solutions;
 
-use std::fs;
+use anyhow::Context;
 use clap::{Parser, ValueEnum};
 use solutions::Solution;
-use anyhow::Context;
+use std::fs;
 
 #[derive(Debug, Clone, Copy, ValueEnum)]
 enum Part {
@@ -31,10 +31,6 @@ struct Args {
 
 fn main() -> anyhow::Result<()> {
     let args = Args::parse();
-
-    if args.day != 1 {
-        anyhow::bail!("Only day 1 is currently implemented");
-    }
 
     let input_dir = if args.example { "examples" } else { "inputs" };
     let input_file = format!("{}/day{:02}.txt", input_dir, args.day);
