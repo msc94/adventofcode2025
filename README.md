@@ -25,11 +25,11 @@ A Rust scaffolding project for solving Advent of Code 2025 problems.
 # Run both parts for day 1
 cargo run -- 1
 
-# Run only part 1 of day 5
-cargo run -- 5 1
+# Run only part 1 of day 1
+cargo run -- 1 1
 
-# Run only part 2 of day 5
-cargo run -- 5 2
+# Run only part 2 of day 1
+cargo run -- 1 2
 ```
 
 ### Running with example input:
@@ -38,11 +38,17 @@ cargo run -- 5 2
 # Run both parts for day 1 with example input
 cargo run -- 1 --example
 
-# Run part 1 of day 5 with example input
-cargo run -- 5 1 --example
+# Run part 1 of day 1 with example input
+cargo run -- 1 1 --example
 
-# Run part 2 of day 3 with example input
-cargo run -- 3 2 --example
+# Run part 2 of day 1 with example input
+cargo run -- 1 2 --example
+```
+
+### Help:
+
+```bash
+cargo run -- --help
 ```
 
 ### Adding a solution:
