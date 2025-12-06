@@ -14,6 +14,17 @@ fn is_repeated(i: u64) -> bool {
     return str[..str.len() / 2] == str[str.len() / 2..];
 }
 
+fn is_repeated_n(i: u64) -> bool {
+    let str = i.to_string();
+    for i in 1..=(str.len() / 2) {
+        let s = &str[..i];
+        if s.repeat(str.len() / s.len()) == str {
+            return true;
+        }
+    }
+    return false;
+}
+
 impl Solution for Day02 {
     fn part1(&self, input: &str) -> anyhow::Result<String> {
         let mut result = 0u64;
@@ -23,10 +34,12 @@ impl Solution for Day02 {
             let begin = parts
                 .next()
                 .ok_or(anyhow!("Invalid range"))?
+                .trim()
                 .parse::<u64>()?;
             let end = parts
                 .next()
                 .ok_or(anyhow!("Invalid range"))?
+                .trim()
                 .parse::<u64>()?;
 
             for i in begin..=end {
@@ -38,8 +51,29 @@ impl Solution for Day02 {
         Ok(result.to_string())
     }
 
-    fn part2(&self, _input: &str) -> anyhow::Result<String> {
-        todo!()
+    fn part2(&self, input: &str) -> anyhow::Result<String> {
+        let mut result = 0u64;
+        let ranges = input.split(',');
+        for range in ranges {
+            let mut parts = range.split('-');
+            let begin = parts
+                .next()
+                .ok_or(anyhow!("Invalid range"))?
+                .trim()
+                .parse::<u64>()?;
+            let end = parts
+                .next()
+                .ok_or(anyhow!("Invalid range"))?
+                .trim()
+                .parse::<u64>()?;
+
+            for i in begin..=end {
+                if is_repeated_n(i) {
+                    result += i;
+                }
+            }
+        }
+        Ok(result.to_string())
     }
 }
 
@@ -53,6 +87,13 @@ mod tests {
     fn test_part1_example() -> anyhow::Result<()> {
         let result = Day02.part1(INPUT)?;
         assert_eq!(result, "1227775554");
+        Ok(())
+    }
+
+    #[test]
+    fn test_part2_example() -> anyhow::Result<()> {
+        let result = Day02.part2(INPUT)?;
+        assert_eq!(result, "4174379265");
         Ok(())
     }
 }
