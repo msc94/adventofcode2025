@@ -2,7 +2,7 @@ use anyhow::anyhow;
 
 use crate::solutions::Solution;
 
-pub struct Day01;
+pub struct Day02;
 
 fn is_repeated(i: i32) -> bool {
     let str = i.to_string();
@@ -14,7 +14,7 @@ fn is_repeated(i: i32) -> bool {
     return str[..str.len() / 2] == str[str.len() / 2..];
 }
 
-impl Solution for Day01 {
+impl Solution for Day02 {
     fn part1(&self, input: &str) -> anyhow::Result<String> {
         let mut result = 0;
         let ranges = input.split(',');
@@ -51,7 +51,7 @@ mod tests {
 
     #[test]
     fn test_part1_example() -> anyhow::Result<()> {
-        let result = Day01.part1(INPUT)?;
+        let result = Day02.part1(INPUT)?;
         assert_eq!(result, "1227775554");
         Ok(())
     }
