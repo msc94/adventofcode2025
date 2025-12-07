@@ -20,6 +20,42 @@ fn get_surrounds(lines: &[&[u8]], x: i64, y: i64) -> Vec<u8> {
         .collect()
 }
 
+fn get_surrounds_vec(lines: &Vec<Vec<u8>>, x: i64, y: i64) -> Vec<u8> {
+    let slice = lines.iter().map(|x| x.as_slice()).collect::<Vec<&[u8]>>();
+    get_surrounds(&slice, x, y)
+}
+
+fn print_field(lines: &Vec<Vec<u8>>) {
+    for line in lines {
+        println!("{}", String::from_utf8_lossy(line));
+    }
+}
+
+fn remove_all(lines: &Vec<Vec<u8>>) -> (Vec<Vec<u8>>, usize) {
+    let mut result = lines.clone();
+    let mut removed = 0;
+
+    for y in 0..lines.len() {
+        for x in 0..lines[y].len() {
+            if lines[y][x] != b'@' {
+                continue;
+            }
+
+            let surrounds = get_surrounds_vec(lines, x as i64, y as i64)
+                .iter()
+                .filter(|c| **c == b'@')
+                .count();
+
+            if surrounds < 4 {
+                result[y][x] = b'.';
+                removed += 1;
+            }
+        }
+    }
+
+    (result, removed)
+}
+
 impl Solution for Day04 {
     fn part1(&self, input: &str) -> anyhow::Result<String> {
         let lines = input.lines().map(|x| x.as_bytes()).collect::<Vec<&[u8]>>();
@@ -35,8 +71,26 @@ impl Solution for Day04 {
         Ok(result)
     }
 
-    fn part2(&self, _input: &str) -> anyhow::Result<String> {
-        todo!("Implement part 2")
+    fn part2(&self, input: &str) -> anyhow::Result<String> {
+        let mut lines = input
+            .lines()
+            .map(|x| x.as_bytes().iter().cloned().collect())
+            .collect::<Vec<Vec<u8>>>();
+
+        let mut total_removed = 0;
+
+        loop {
+            let (new_lines, removed) = remove_all(&lines);
+
+            if removed == 0 {
+                break;
+            }
+
+            lines = new_lines;
+            total_removed += removed;
+        }
+
+        Ok(total_removed.to_string())
     }
 }
 
@@ -67,8 +121,9 @@ mod tests {
     }
 
     #[test]
-    fn test_part2_example() {
-        let result = Day04.part2(INPUT).unwrap();
-        assert_eq!(result, "");
+    fn test_part2_example() -> anyhow::Result<()> {
+        let result = Day04.part2(INPUT)?;
+        assert_eq!(result, "43");
+        Ok(())
     }
 }
