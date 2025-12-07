@@ -1,6 +1,7 @@
 use std::ops::RangeInclusive;
 
 use anyhow::anyhow;
+use rangemap::RangeInclusiveSet;
 use regex::Regex;
 
 use crate::solutions::Solution;
@@ -52,8 +53,19 @@ impl Solution for Day05 {
             .to_string())
     }
 
-    fn part2(&self, _input: &str) -> anyhow::Result<String> {
-        todo!("Implement part 2")
+    fn part2(&self, input: &str) -> anyhow::Result<String> {
+        let input = parse_input(input)?;
+        let mut ranges = RangeInclusiveSet::new();
+
+        for r in input.ranges {
+            ranges.insert(r);
+        }
+
+        Ok(ranges
+            .iter()
+            .map(|r| r.end() - r.start() + 1)
+            .sum::<i64>()
+            .to_string())
     }
 }
 
@@ -87,7 +99,7 @@ mod tests {
     #[test]
     fn test_part2_example() -> anyhow::Result<()> {
         let result = Day05.part2(INPUT)?;
-        assert_eq!(result, "");
+        assert_eq!(result, "14");
         Ok(())
     }
 }
