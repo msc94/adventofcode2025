@@ -19,19 +19,22 @@ impl Solution for {{ day_struct }} {
 
 #[cfg(test)]
 mod tests {
+    use indoc::indoc;
+
     use super::*;
 
+    static INPUT: &str = indoc! {"
+    "};
+
     #[test]
-    fn test_part1_example() {
-        let input = "";
-        let result = {{ day_struct }}.part1(input).unwrap();
+    fn test_part1_example() -> anyhow::Result<()> {
+        let result = {{ day_struct }}.part1(input)?;
         assert_eq!(result, "");
     }
 
     #[test]
-    fn test_part2_example() {
-        let input = "";
-        let result = {{ day_struct }}.part2(input).unwrap();
+    fn test_part2_example() -> anmhy::Result<()> {
+        let result = {{ day_struct }}.part2(input)?;
         assert_eq!(result, "");
     }
 }

@@ -1,5 +1,4 @@
 use crate::solutions::Solution;
-use anyhow::anyhow;
 
 pub struct Day03;
 
