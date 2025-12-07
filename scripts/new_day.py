@@ -34,7 +34,7 @@ mod tests {
     }
 
     #[test]
-    fn test_part2_example() -> anmhy::Result<()> {
+    fn test_part2_example() -> anyhow::Result<()> {
         let result = {{ day_struct }}.part2(INPUT)?;
         assert_eq!(result, "");
         Ok(())

@@ -92,7 +92,7 @@ mod tests {
     #[test]
     fn test_part1_example() -> anyhow::Result<()> {
         let result = Day05.part1(INPUT)?;
-        assert_eq!(result, "");
+        assert_eq!(result, "3");
         Ok(())
     }
 
