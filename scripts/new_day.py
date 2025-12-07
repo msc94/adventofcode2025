@@ -19,23 +19,20 @@ impl Solution for {{ day_struct }} {
 
 #[cfg(test)]
 mod tests {
-    use indoc::indoc;
-
     use super::*;
 
-    static INPUT: &str = indoc! {"
-    "};
-
     #[test]
-    fn test_part1_example() -> anyhow::Result<()> {
-        let result = {{ day_struct }}.part1(INPUT)?;
+    fn test_part1() -> anyhow::Result<()> {
+        let input = std::fs::read_to_string("inputs/day_{{ day_padded }}.txt")?;
+        let result = {{ day_struct }}.part1(&input)?;
         assert_eq!(result, "");
         Ok(())
     }
 
     #[test]
-    fn test_part2_example() -> anyhow::Result<()> {
-        let result = {{ day_struct }}.part2(INPUT)?;
+    fn test_part2() -> anyhow::Result<()> {
+        let input = std::fs::read_to_string("inputs/day_{{ day_padded }}.txt")?;
+        let result = {{ day_struct }}.part2(&input)?;
         assert_eq!(result, "");
         Ok(())
     }
@@ -64,8 +61,7 @@ def main():
 
     root = Path(__file__).parent.parent
     solution_file = root / "src" / "solutions" / f"{day_mod}.rs"
-    input_file = root / "inputs" / f"{day_padded}.txt"
-    example_file = root / "examples" / f"{day_padded}.txt"
+    input_file = root / "inputs" / f"day_{day_padded}.txt"
 
     # Check if day already exists
     if solution_file.exists():
@@ -74,28 +70,25 @@ def main():
 
     # Render solution template
     template = Template(SOLUTION_TEMPLATE)
-    solution_code = template.render(day_struct=day_struct)
+    solution_code = template.render(day_struct=day_struct, day_padded=day_padded)
 
     # Create solution file
     solution_file.write_text(solution_code)
 
-    # Create empty input files
+    # Create empty input file
     input_file.touch()
-    example_file.touch()
 
     print(f"✓ Created scaffolding for Day {day}:")
     print(f"  - src/solutions/{day_mod}.rs")
-    print(f"  - inputs/day{day_padded}.txt")
-    print(f"  - examples/day{day_padded}.txt")
+    print(f"  - inputs/day_{day_padded}.txt")
     print()
     print("Next steps:")
-    print(f"  1. Add your input to inputs/day{day_padded}.txt")
-    print(f"  2. Add example input to examples/day{day_padded}.txt")
-    print(f"  3. Implement part1() and part2() in src/solutions/{day_mod}.rs")
-    print(f"  4. Add 'pub mod {day_mod};' to src/solutions/mod.rs")
-    print(f"  5. Add '{day} => Ok(Box::new({day_mod}::{day_struct})),' to get_solution() in src/solutions/mod.rs")
-    print(f"  6. Test with: cargo test solutions::{day_mod}")
-    print(f"  7. Run with: cargo run --release -- --day {day}")
+    print(f"  1. Add your input to inputs/day_{day_padded}.txt")
+    print(f"  2. Implement part1() and part2() in src/solutions/{day_mod}.rs")
+    print(f"  3. Add 'pub mod {day_mod};' to src/solutions/mod.rs")
+    print(f"  4. Add '{day} => Ok(Box::new({day_mod}::{day_struct})),' to get_solution() in src/solutions/mod.rs")
+    print(f"  5. Test with: cargo test solutions::{day_mod}")
+    print(f"  6. Run with: cargo run --release -- --day {day}")
 
 if __name__ == "__main__":
     main()
