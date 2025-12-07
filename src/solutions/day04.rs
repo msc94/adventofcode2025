@@ -5,8 +5,8 @@ use crate::solutions::Solution;
 pub struct Day04;
 
 fn get_byte(lines: &[&[u8]], x: i64, y: i64) -> Option<u8> {
-    if x >= 0 && y >= 0 && x < lines.len() as i64 && y < lines[x as usize].len() as i64 {
-        Some(lines[x as usize][y as usize])
+    if y >= 0 && x >= 0 && y < lines.len() as i64 && x < lines[y as usize].len() as i64 {
+        Some(lines[y as usize][x as usize])
     } else {
         None
     }
@@ -25,15 +25,14 @@ impl Solution for Day04 {
         let lines = input.lines().map(|x| x.as_bytes()).collect::<Vec<&[u8]>>();
 
         let result = (0..lines.len())
-            .flat_map(|y| (0..lines[y].len()).map(move |x| (y, x)))
-            .filter(|(y, x)| lines[*y][*x] == b'@')
-            .filter(|(y, x)| {
-                let surrounds = get_surrounds(&lines, *y as i64, *x as i64);
-                surrounds.iter().filter(|b| **b == b'@').count() < 4
-            })
-            .count();
+            .flat_map(|y| (0..lines[y].len()).map(move |x| (x, y)))
+            .filter(|(x, y)| lines[*y][*x] == b'@')
+            .map(|(x, y)| get_surrounds(&lines, x as i64, y as i64))
+            .filter(|s| s.iter().filter(|c| **c == b'@').count() < 4)
+            .count()
+            .to_string();
 
-        Ok(result.to_string())
+        Ok(result)
     }
 
     fn part2(&self, _input: &str) -> anyhow::Result<String> {
