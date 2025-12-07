@@ -92,14 +92,6 @@ def main():
     print(f"✓ Created scaffolding for Day {day}:")
     print(f"  - src/solutions/{day_mod}.rs")
     print(f"  - inputs/day_{day_padded}.txt")
-    print()
-    print("Next steps:")
-    print(f"  1. Add your input to inputs/day_{day_padded}.txt")
-    print(f"  2. Implement part1() and part2() in src/solutions/{day_mod}.rs")
-    print(f"  3. Add 'pub mod {day_mod};' to src/solutions/mod.rs")
-    print(f"  4. Add '{day} => Ok(Box::new({day_mod}::{day_struct})),' to get_solution() in src/solutions/mod.rs")
-    print(f"  5. Test with: cargo test solutions::{day_mod}")
-    print(f"  6. Run with: cargo run --release -- --day {day}")
     
     return 0
 
