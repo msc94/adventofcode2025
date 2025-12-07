@@ -28,14 +28,16 @@ mod tests {
 
     #[test]
     fn test_part1_example() -> anyhow::Result<()> {
-        let result = {{ day_struct }}.part1(input)?;
+        let result = {{ day_struct }}.part1(INPUT)?;
         assert_eq!(result, "");
+        Ok(())
     }
 
     #[test]
     fn test_part2_example() -> anmhy::Result<()> {
-        let result = {{ day_struct }}.part2(input)?;
+        let result = {{ day_struct }}.part2(INPUT)?;
         assert_eq!(result, "");
+        Ok(())
     }
 }
 """
