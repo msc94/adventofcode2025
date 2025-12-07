@@ -62,7 +62,10 @@ def parse_arguments():
 
     return args
 
-def create_day(day):
+def main():
+    args = parse_arguments()
+    
+    day = args.day
     day_padded = f"{day:02d}"
     day_mod = f"day{day_padded}"
     day_struct = f"Day{day_padded}"
@@ -73,7 +76,8 @@ def create_day(day):
 
     # Check if day already exists
     if solution_file.exists():
-        raise FileExistsError(f"{day_mod} already exists")
+        print(f"Error: {day_mod} already exists")
+        return 1
 
     # Render solution template
     template = Template(SOLUTION_TEMPLATE)
@@ -96,14 +100,8 @@ def create_day(day):
     print(f"  4. Add '{day} => Ok(Box::new({day_mod}::{day_struct})),' to get_solution() in src/solutions/mod.rs")
     print(f"  5. Test with: cargo test solutions::{day_mod}")
     print(f"  6. Run with: cargo run --release -- --day {day}")
-
-def main():
-    args = parse_arguments()
-    try:
-        create_day(args.day)
-    except FileExistsError as e:
-        print(f"Error: {e}", file=__import__('sys').stderr)
-        __import__('sys').exit(1)
+    
+    return 0
 
 if __name__ == "__main__":
-    main()
+    exit(main())
