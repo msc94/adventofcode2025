@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import sys
-import re
 from pathlib import Path
 from jinja2 import Template
 
@@ -62,7 +61,6 @@ def main():
     solution_file = root / "src" / "solutions" / f"{day_mod}.rs"
     input_file = root / "inputs" / f"{day_padded}.txt"
     example_file = root / "examples" / f"{day_padded}.txt"
-    mod_file = root / "src" / "solutions" / "mod.rs"
 
     # Check if day already exists
     if solution_file.exists():
@@ -80,32 +78,6 @@ def main():
     input_file.touch()
     example_file.touch()
 
-    # Update mod.rs
-    mod_content = mod_file.read_text()
-
-    # Add module declaration if not present
-    if f"pub mod {day_mod};" not in mod_content:
-        # Find the last pub mod line and add after it
-        lines = mod_content.split('\n')
-        last_mod_idx = -1
-        for i, line in enumerate(lines):
-            if line.startswith('pub mod day'):
-                last_mod_idx = i
-        
-        if last_mod_idx >= 0:
-            lines.insert(last_mod_idx + 1, f"pub mod {day_mod};")
-            mod_content = '\n'.join(lines)
-            mod_file.write_text(mod_content)
-
-    # Add to get_solution match if not present
-    if f"{day} =>" not in mod_content:
-        mod_content = re.sub(
-            r'(\s+)_ => anyhow::bail!',
-            f'        {day} => Ok(Box::new({day_mod}::{day_struct})),\n        _ => anyhow::bail!',
-            mod_content
-        )
-        mod_file.write_text(mod_content)
-
     print(f"✓ Created scaffolding for Day {day}:")
     print(f"  - src/solutions/{day_mod}.rs")
     print(f"  - inputs/day{day_padded}.txt")
@@ -115,8 +87,10 @@ def main():
     print(f"  1. Add your input to inputs/day{day_padded}.txt")
     print(f"  2. Add example input to examples/day{day_padded}.txt")
     print(f"  3. Implement part1() and part2() in src/solutions/{day_mod}.rs")
-    print(f"  4. Test with: cargo test solutions::{day_mod}")
-    print(f"  5. Run with: cargo run --release -- --day {day}")
+    print(f"  4. Add 'pub mod {day_mod};' to src/solutions/mod.rs")
+    print(f"  5. Add '{day} => Ok(Box::new({day_mod}::{day_struct})),' to get_solution() in src/solutions/mod.rs")
+    print(f"  6. Test with: cargo test solutions::{day_mod}")
+    print(f"  7. Run with: cargo run --release -- --day {day}")
 
 if __name__ == "__main__":
     main()
