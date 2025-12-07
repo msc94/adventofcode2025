@@ -4,7 +4,7 @@ use crate::solutions::Solution;
 
 pub struct Day04;
 
-pub fn get_byte(lines: &[&[u8]], x: i64, y: i64) -> Option<u8> {
+fn get_byte(lines: &[&[u8]], x: i64, y: i64) -> Option<u8> {
     if x >= 0 && y >= 0 && x < lines.len() as i64 && y < lines[x as usize].len() as i64 {
         Some(lines[x as usize][y as usize])
     } else {
@@ -12,7 +12,7 @@ pub fn get_byte(lines: &[&[u8]], x: i64, y: i64) -> Option<u8> {
     }
 }
 
-pub fn get_surrounds(lines: &[&[u8]], x: i64, y: i64) -> Vec<u8> {
+fn get_surrounds(lines: &[&[u8]], x: i64, y: i64) -> Vec<u8> {
     (-1..=1)
         .cartesian_product(-1..=1)
         .filter(|(dx, dy)| *dx != 0 || *dy != 0)
@@ -22,26 +22,17 @@ pub fn get_surrounds(lines: &[&[u8]], x: i64, y: i64) -> Vec<u8> {
 
 impl Solution for Day04 {
     fn part1(&self, input: &str) -> anyhow::Result<String> {
-        let mut result = 0;
-
         let lines = input.lines().map(|x| x.as_bytes()).collect::<Vec<&[u8]>>();
 
-        for y in 0..lines.len() {
-            for x in 0..lines[y].len() {
-                if lines[y][x] != b'@' {
-                    continue;
-                }
+        let result = (0..lines.len())
+            .flat_map(|y| (0..lines[y].len()).map(move |x| (y, x)))
+            .filter(|(y, x)| lines[*y][*x] == b'@')
+            .filter(|(y, x)| {
+                let surrounds = get_surrounds(&lines, *y as i64, *x as i64);
+                surrounds.iter().filter(|b| **b == b'@').count() < 4
+            })
+            .count();
 
-                let surrounds = get_surrounds(&lines, y as i64, x as i64)
-                    .iter()
-                    .filter(|x| **x == b'@')
-                    .count();
-
-                if surrounds < 4 {
-                    result += 1;
-                }
-            }
-        }
         Ok(result.to_string())
     }
 
