@@ -29,7 +29,6 @@ fn parse_input(input: &str) -> anyhow::Result<Input> {
             result.columns[i]
                 .numbers
                 .push(x.as_str().trim().parse::<i64>()?);
-            dbg!(&result.columns[i]);
         }
 
         for (i, x) in operation_regex.find_iter(line).enumerate() {
@@ -37,14 +36,24 @@ fn parse_input(input: &str) -> anyhow::Result<Input> {
         }
     }
 
-    dbg!(&result);
     Ok(result)
 }
 
 impl Solution for Day06 {
     fn part1(&self, input: &str) -> anyhow::Result<String> {
         let input = parse_input(input)?;
-        todo!()
+        Ok(input
+            .columns
+            .iter()
+            .map(|c| {
+                if c.operation == '+' {
+                    c.numbers.iter().sum::<i64>()
+                } else {
+                    c.numbers.iter().product()
+                }
+            })
+            .sum::<i64>()
+            .to_string())
     }
 
     fn part2(&self, _input: &str) -> anyhow::Result<String> {
@@ -68,7 +77,7 @@ mod tests {
     #[test]
     fn test_part1_example() -> anyhow::Result<()> {
         let result = Day06.part1(INPUT)?;
-        assert_eq!(result, "");
+        assert_eq!(result, "4277556");
         Ok(())
     }
 
