@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import argparse
 import sys
 from pathlib import Path
 from jinja2 import Template
@@ -40,20 +41,26 @@ mod tests {
 """
 
 def main():
-    if len(sys.argv) != 2:
-        print("Usage: python3 new_day.py <day>")
-        print("Example: python3 new_day.py 5")
-        sys.exit(1)
+    parser = argparse.ArgumentParser(
+        description="Create scaffolding for a new Advent of Code day",
+        epilog="Example: python3 new_day.py 5"
+    )
+    parser.add_argument(
+        "day",
+        type=int,
+        help="Day number (1-25)"
+    )
+    parser.add_argument(
+        "--no-tests",
+        action="store_true",
+        help="Skip creating test file"
+    )
 
-    try:
-        day = int(sys.argv[1])
-    except ValueError:
-        print("Error: Day must be a number")
-        sys.exit(1)
+    args = parser.parse_args()
+    day = args.day
 
     if day < 1 or day > 25:
-        print("Error: Day must be between 1 and 25")
-        sys.exit(1)
+        parser.error("Day must be between 1 and 25")
 
     day_padded = f"{day:02d}"
     day_mod = f"day{day_padded}"
@@ -65,8 +72,7 @@ def main():
 
     # Check if day already exists
     if solution_file.exists():
-        print(f"Error: {day_mod} already exists")
-        sys.exit(1)
+        parser.error(f"{day_mod} already exists")
 
     # Render solution template
     template = Template(SOLUTION_TEMPLATE)
