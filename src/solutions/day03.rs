@@ -21,7 +21,6 @@ impl Solution for Day03 {
             let (first_digit, first_index) = get_max_digit(&line[..line.len() - 1])?;
             let (second_digit, _) = get_max_digit(&line[first_index + 1..line.len()])?;
             let maximum = first_digit.to_string() + &second_digit.to_string();
-            println!("Line: {}, First: {}, Second: {}, Max: {}", line, first_digit, second_digit, maximum);
             total += maximum.parse::<i32>()?;
         }
 
