@@ -13,22 +13,39 @@ pub fn get_max_digit(str: &str) -> anyhow::Result<(char, usize)> {
     return Ok((max_c, max_i));
 }
 
+pub fn get_solution(str: &str, num: usize) -> anyhow::Result<u64> {
+    let mut result = String::new();
+    let mut str = str;
+
+    for i in 0..num {
+        let still_needed = num - i;
+        let (digit, index) = get_max_digit(&str[..=str.len() - still_needed])?;
+        result.push(digit);
+        str = &str[index + 1..];
+    }
+
+    Ok(result.parse::<u64>()?)
+}
+
 impl Solution for Day03 {
     fn part1(&self, input: &str) -> anyhow::Result<String> {
         let mut total = 0;
 
         for line in input.lines() {
-            let (first_digit, first_index) = get_max_digit(&line[..line.len() - 1])?;
-            let (second_digit, _) = get_max_digit(&line[first_index + 1..line.len()])?;
-            let maximum = first_digit.to_string() + &second_digit.to_string();
-            total += maximum.parse::<i32>()?;
+            total += get_solution(line, 2)?;
         }
 
         Ok(total.to_string())
     }
 
     fn part2(&self, input: &str) -> anyhow::Result<String> {
-        todo!()
+        let mut total = 0;
+
+        for line in input.lines() {
+            total += get_solution(line, 12)?;
+        }
+
+        Ok(total.to_string())
     }
 }
 
@@ -55,7 +72,7 @@ mod tests {
     #[test]
     fn test_part2_example() -> anyhow::Result<()> {
         let result = Day03.part2(INPUT)?;
-        assert_eq!(result, "4174379265");
+        assert_eq!(result, "3121910778619");
         Ok(())
     }
 }
