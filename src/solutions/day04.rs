@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 use crate::solutions::Solution;
 
 pub struct Day04;
@@ -11,18 +13,11 @@ pub fn get_byte(lines: &[&[u8]], x: i64, y: i64) -> Option<u8> {
 }
 
 pub fn get_surrounds(lines: &[&[u8]], x: i64, y: i64) -> Vec<u8> {
-    let mut surrounds = Vec::new();
-    for dy in -1..=1 {
-        for dx in -1..=1 {
-            if dx == 0 && dy == 0 {
-                continue;
-            }
-            if let Some(b) = get_byte(lines, x + dx, y + dy) {
-                surrounds.push(b);
-            }
-        }
-    }
-    surrounds
+    (-1..=1)
+        .cartesian_product(-1..=1)
+        .filter(|(dx, dy)| *dx != 0 || *dy != 0)
+        .filter_map(|(dx, dy)| get_byte(lines, x + dx, y + dy))
+        .collect()
 }
 
 impl Solution for Day04 {
