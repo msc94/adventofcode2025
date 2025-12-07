@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import argparse
-import sys
 from pathlib import Path
 from jinja2 import Template
 
@@ -40,7 +39,7 @@ mod tests {
 }
 """
 
-def main():
+def parse_arguments():
     parser = argparse.ArgumentParser(
         description="Create scaffolding for a new Advent of Code day",
         epilog="Example: python3 new_day.py 5"
@@ -57,11 +56,13 @@ def main():
     )
 
     args = parser.parse_args()
-    day = args.day
 
-    if day < 1 or day > 25:
+    if args.day < 1 or args.day > 25:
         parser.error("Day must be between 1 and 25")
 
+    return args
+
+def create_day(day):
     day_padded = f"{day:02d}"
     day_mod = f"day{day_padded}"
     day_struct = f"Day{day_padded}"
@@ -72,7 +73,7 @@ def main():
 
     # Check if day already exists
     if solution_file.exists():
-        parser.error(f"{day_mod} already exists")
+        raise FileExistsError(f"{day_mod} already exists")
 
     # Render solution template
     template = Template(SOLUTION_TEMPLATE)
@@ -95,6 +96,14 @@ def main():
     print(f"  4. Add '{day} => Ok(Box::new({day_mod}::{day_struct})),' to get_solution() in src/solutions/mod.rs")
     print(f"  5. Test with: cargo test solutions::{day_mod}")
     print(f"  6. Run with: cargo run --release -- --day {day}")
+
+def main():
+    args = parse_arguments()
+    try:
+        create_day(args.day)
+    except FileExistsError as e:
+        print(f"Error: {e}", file=__import__('sys').stderr)
+        __import__('sys').exit(1)
 
 if __name__ == "__main__":
     main()
